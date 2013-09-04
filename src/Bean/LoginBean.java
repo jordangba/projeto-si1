@@ -1,7 +1,6 @@
 package Bean;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -106,7 +105,7 @@ public class LoginBean {
 
 		Usuario usuario1 = new Usuario();
 		usuario1.setNome("usuario1");
-		usuario1.setEmail("usuario1");
+		usuario1.setEmail("usuario1@email.com");
 		usuario1.setEndereco("usuario1");
 		usuario1.setLogin("usuario1");
 		usuario1.setSenha("usuario1");
@@ -182,12 +181,12 @@ public class LoginBean {
 	public String logar() {
 		try {
 			usuario = this.controller.login(login, password);
-			caronas = usuario.getCaronasUser();
+			caronas = usuario.getCaronas();
 			solicitacoes = usuario.getSolicitacoes();
 			limpa();
 			return "telaInicial.xhtml";
 		} catch (LoginException e) {
-			msgUsuario("Login Nï¿½o realizado", e.getMessage());
+			msgUsuario("Login Não realizado", e.getMessage());
 			return "";
 		}
 
@@ -309,7 +308,7 @@ public class LoginBean {
 	public String cadastraCarona() {
 		try {
 			Carona carona = new Carona(origem, destino, data, hora, vagas,
-					usuario.getNome() + usuario.getCaronasUser().size(),
+					usuario.getNome() + usuario.getCaronas().size(),
 					usuario.getLogin());
 			this.controller.cadastraCarona(this.usuario, carona);
 			msgUsuario("Carona Cadastrada", "");
@@ -379,15 +378,20 @@ public class LoginBean {
 
 	public String addSolicitacao() {
 		try {
+			System.out.println("AAAAAA");
 			SolicitacaoDeVaga solicitacao = new SolicitacaoDeVaga(carona,
 					sugestaoLocal, carona.getMotorista() + carona.getData()
 							+ carona.getHora(), usuario);
+			System.out.println("BBBBBBBBBBBB");
 			controller.addSolicitacao(solicitacao);
+			System.out.println("CCCCCCCCCCCCCC");
 			sugestaoLocal = "";
 		} catch (Exception e) {
+			System.out.println("DDDDDDDDDDDDDDDDDDD");
 			msgUsuario("Solicitacao ja existe ", e.getMessage());
 			sugestaoLocal = "";
 		}
+		System.out.println("EEEEEEEEEEEEEee");
 		return "buscaCarona.xhtml";
 
 	}

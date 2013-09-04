@@ -2,6 +2,7 @@ package Controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import Exception.CadastroException;
 import Exception.LoginException;
@@ -13,33 +14,32 @@ public class Controller {
 
 	private ControllerUsuario controllerUsuario;
 	private ControllerCarona controllerCarona;
+	private boolean logged = false;
 
 	public Controller() {
 		this.controllerUsuario = new ControllerUsuario();
 		this.controllerCarona = new ControllerCarona();
 	}
 
-	boolean logged = false;
-
 	public String getNameUserLogged() {
-	if(logged)
-	return controllerUsuario.getNameUserLogged();
-	return "";
+		if (logged) {
+			return controllerUsuario.getNameUserLogged();
+		}
+		return "";
 	}
 
 	public String getAddressUserLogged() {
-	if(logged)
-	return controllerUsuario.getAddressUserLogged();
-	return "";
+		if (logged)
+			return controllerUsuario.getAddressUserLogged();
+		return "";
 	}
 
 	public Usuario login(String login, String password) throws LoginException {
-	Usuario user = this.controllerUsuario.login(login, password);
-	logged = true;
-	controllerUsuario.setNameLogged(login);
-	return user;
+		Usuario user = this.controllerUsuario.login(login, password);
+		logged = true;
+		controllerUsuario.setNameLogged(login);
+		return user;
 	}
-	
 
 	public void cadastraUsuario(Usuario usuario) throws CadastroException {
 		this.controllerUsuario.cadastraUsuario(usuario);
@@ -50,16 +50,21 @@ public class Controller {
 		return carona.getIdCarona();
 	}
 
+	public Usuario buscaUsuario(String login) {
+		return this.controllerUsuario.buscaUsuario(login);
+	}
+
 	public List<Carona> buscaCarona(String origem, String destino) {
 		if (origem == null
-				|| destino == null
-				|| (origem.matches("[\\-/.\\[_\\]()!\"+,:;<=>{|}#@$%ï¿½&*0-9].*"))
-				|| (origem.trim().equals(""))
-				|| (destino
-						.matches("[\\-/.\\[_\\]()!\"+,:;<=>{|}#@$%ï¿½&*0-9].*"))
-				|| (destino.trim().equals(""))) {
-			
-			throw new IllegalArgumentException("Caracteres invï¿½lidos");
+				|| origem
+						.matches("[\\-/.\\[_\\]()!\"+,:;<=>{|}#@$%ï¿½&*0-9].*")
+				|| origem.trim().equals("")) {
+			throw new IllegalArgumentException("Origem inválida");
+		} else if (destino == null
+				|| destino
+						.matches("[\\-/.\\[_\\]()!\"+,:;<=>{|}#@$%ï¿½&*0-9].*")
+				|| destino.trim().equals("")) {
+			throw new IllegalArgumentException("Destino inválido");
 		}
 		List<Carona> retorno = new ArrayList<Carona>();
 		for (Carona carona : this.controllerCarona.getCaronas()) {
@@ -74,17 +79,30 @@ public class Controller {
 		}
 		return retorno;
 	}
-	
-	public List<Carona> getCarona(){
+
+	public Map<String, Carona> buscaCarona(String idSessao, String origem,
+			String destino) {
+		return this.controllerCarona.buscaCarona(idSessao, origem, destino);
+	}
+
+	public List<Carona> getCaronas() {
 		return this.controllerCarona.getCaronas();
 	}
 
 	public String addSolicitacao(SolicitacaoDeVaga solicitacao) {
 		String nome = solicitacao.getCarona().getMotorista();
 		Usuario user = controllerUsuario.getUsuarios().get(nome);
-		
+
 		user.addSolicitacao(solicitacao);
 		return "";
-		
 	}
+	
+	public Usuario getLoggedUser(){
+		return this.controllerUsuario.getLoggedUser();
+	}
+
+	public Carona getCaronaByID(String id){
+		return this.controllerCarona.getCaronaByID(id);
+	}
+	
 }

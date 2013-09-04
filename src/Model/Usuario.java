@@ -2,7 +2,6 @@ package Model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class Usuario implements Serializable {
@@ -13,7 +12,7 @@ public class Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String login, senha, nome, endereco, email;
-	private List<Carona> caronasUser;
+	private List<Carona> caronas;
 	private List<SolicitacaoDeVaga> solicitacoes;
 
 	public Usuario() {
@@ -22,7 +21,7 @@ public class Usuario implements Serializable {
 		this.nome = "";
 		this.email = "";
 		this.endereco = "";
-		caronasUser = new ArrayList<Carona>();
+		this.caronas = new ArrayList<Carona>();
 		this.solicitacoes = new ArrayList<SolicitacaoDeVaga>();
 	}
 
@@ -36,15 +35,15 @@ public class Usuario implements Serializable {
 
 	public void addSolicitacao(SolicitacaoDeVaga solicitacao) {
 		if (this.login.equals(solicitacao.getDonoSolicitacao().getLogin())) {
-			throw new IllegalArgumentException("Solicitaï¿½ï¿½o invï¿½lida");
+			throw new IllegalArgumentException("Solicitaçãoo inválida");
 		}
 
-		if (caronasUser.contains(solicitacao.getCarona())
+		if (caronas.contains(solicitacao.getCarona())
 				&& !solicitacoes.contains(solicitacao)) {
 			this.solicitacoes.add(solicitacao);
 			
 		} else {
-			throw new IllegalArgumentException("Solicitaï¿½ï¿½o invï¿½lida");
+			throw new IllegalArgumentException("Solicitaçãoo inválida");
 		}
 	}
 	
@@ -59,17 +58,17 @@ public class Usuario implements Serializable {
 			solicitacoes.remove(solicitacao);
 	}
 
-	public List<Carona> getCaronasUser() {
-		return caronasUser;
+	public List<Carona> getCaronas() {
+		return caronas;
 	}
 
 	public void setCaronasUser(List<Carona> caronasUser) {
-		this.caronasUser = caronasUser;
+		this.caronas = caronasUser;
 	}
 
 	private void verificaLogin(String login) {
 		if (login == null || login.equals("")) {
-			throw new IllegalArgumentException("Login invï¿½lido");
+			throw new IllegalArgumentException("Login inválido");
 		}
 	}
 
@@ -119,24 +118,24 @@ public class Usuario implements Serializable {
 
 	private void verificaSenha(String senha) {
 		if (senha == null || senha.isEmpty()) {
-			throw new IllegalArgumentException("Senha invï¿½lida");
+			throw new IllegalArgumentException("Senha inválida");
 		}
 	}
 
 	private void verificaNome(String nome) {
 		if (nome == null || nome.isEmpty()) {
-			throw new IllegalArgumentException("Nome invï¿½lido");
+			throw new IllegalArgumentException("Nome inválido");
 		}
 	}
 
 	private void verificaEmail(String email) {
 		if (email == null || email.isEmpty()) {
-			throw new IllegalArgumentException("Email invï¿½lido");
+			throw new IllegalArgumentException("Email inválido");
 		}
 	}
 
 	public void addCarona(Carona carona) {
-		caronasUser.add(carona);
+		caronas.add(carona);
 	}
 
 	public boolean equals(Object obj) {

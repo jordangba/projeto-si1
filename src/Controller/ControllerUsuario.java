@@ -10,7 +10,8 @@ import Model.Usuario;
 public class ControllerUsuario {
 
 	private Map<String, Usuario> usuarios;
-
+	private String logged = "";
+	
 	public ControllerUsuario() {
 		this.usuarios = new HashMap<String, Usuario>();
 	}
@@ -19,12 +20,14 @@ public class ControllerUsuario {
 		return this.usuarios;
 	}
 
-	String logged = "";
-
 	public void setNameLogged(String name) {
 		this.logged = name;
 	}
 
+	public Usuario getLoggedUser(){
+		return this.usuarios.get(logged);
+	}
+	
 	public String getNameUserLogged() {
 		String retorno = "";
 		Usuario user = usuarios.get(logged);
@@ -32,6 +35,10 @@ public class ControllerUsuario {
 		return retorno;
 	}
 
+	public Usuario buscaUsuario(String login){
+		return this.usuarios.get(login);
+	}
+	
 	public String getAddressUserLogged() {
 		String retorno = "";
 		Usuario user = usuarios.get(logged);
@@ -42,7 +49,7 @@ public class ControllerUsuario {
 	public Usuario login(String login, String password) throws LoginException {
 		// Checa se ï¿½ passado null ou string vazia
 		if (login == null || login.isEmpty()) {
-			throw new LoginException("Login invï¿½lido");
+			throw new LoginException("Login inválido");
 		}
 		// Busca pelo usuï¿½rio
 		Usuario user = usuarios.get(login);
@@ -51,11 +58,11 @@ public class ControllerUsuario {
 			if (user.getSenha().equals(password)) {
 				return user;
 			} else {
-				throw new LoginException("Atributo invï¿½lido");
+				throw new LoginException("Login inválido");
 			}
 			// Caso nï¿½o encontre nenhum usuï¿½rio com o login passado
 		} else {
-			throw new LoginException("Usuï¿½rio inexistente");
+			throw new LoginException("Usuário inexistente");
 		}
 	}
 
@@ -86,12 +93,12 @@ public class ControllerUsuario {
 	public void cadastraUsuario(Usuario usuario) throws CadastroException {
 		// Checando se tem algum login jï¿½ cadastrado
 		if (this.usuarios.containsKey(usuario.getLogin())) {
-			throw new CadastroException("Login jï¿½ cadastrado");
+			throw new CadastroException("Já existe um usuário com este login");
 		} else {
 			// Checando se tem algum email jï¿½ cadastrado
 			for (Usuario user : this.usuarios.values()) {
 				if (user.getEmail().equals(usuario.getEmail())) {
-					throw new CadastroException("Email jï¿½ cadastrado");
+					throw new CadastroException("Já existe um usuário com este email");
 				}
 			}
 			// Adicionando novo usuï¿½rio

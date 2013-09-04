@@ -30,10 +30,14 @@ public class Carona {
 		this.setCaroneiros(new HashSet<Usuario>());
 	}
 
+	public String getTrajeto() {
+		return this.origem + " - " + this.destino;
+	}
+
 	private void checaHoraEData(String data, String hora) {
 		if (this.dataDoSistema.toString().compareTo(data.toString()) == 0) {
 			if (this.horaDoSistema.toString().compareTo(hora.toString()) > 0) {
-				throw new IllegalArgumentException("Hora invï¿½lida");
+				throw new IllegalArgumentException("Hora inválida");
 			}
 		}
 	}
@@ -72,9 +76,10 @@ public class Carona {
 
 	public void setOrigem(String origem) {
 		if ((origem == null)
-				|| (origem.matches("[\\-/.\\[_\\]()!\"+,:;<=>{|}#@$%ï¿½&*0-9].*"))
+				|| (origem
+						.matches("[\\-/.\\[_\\]()!\"+,:;<=>{|}#@$%ï¿½&*0-9].*"))
 				|| (origem.trim().equals(""))) {
-			throw new IllegalArgumentException("Origem invï¿½lida");
+			throw new IllegalArgumentException("Origem inválida");
 		}
 		this.origem = origem.trim();
 	}
@@ -92,7 +97,7 @@ public class Carona {
 				|| (destino
 						.matches("[\\-/.\\[_\\]()!\"+,:;<=>{|}#@$%ï¿½&*0-9].*"))
 				|| (destino.trim().equals(""))) {
-			throw new IllegalArgumentException("Destino invï¿½lido");
+			throw new IllegalArgumentException("Destino inválido");
 		}
 		this.destino = destino.trim();
 	}
@@ -111,14 +116,14 @@ public class Carona {
 
 	public void setVagas(int vagas) {
 		if (vagas < 1) {
-			throw new IllegalArgumentException("Vaga invï¿½lida");
+			throw new IllegalArgumentException("Vaga inválida");
 		}
 		this.vagas = vagas;
 	}
-	
-	public void subtrairVagas(){
+
+	public void subtrairVagas() {
 		if (vagas < 1) {
-			throw new IllegalArgumentException("Vaga invï¿½lida");
+			throw new IllegalArgumentException("Vaga inválida");
 		}
 		this.vagas--;
 	}
@@ -130,7 +135,7 @@ public class Carona {
 	private void checaData(String stringData) {
 
 		if (stringData == null || stringData.isEmpty()) {
-			throw new IllegalArgumentException("Data invï¿½lida");
+			throw new IllegalArgumentException("Data inválida");
 		}
 
 		Calendar data = Calendar.getInstance();
@@ -139,7 +144,7 @@ public class Carona {
 			formato.setLenient(false);
 			data.setTime(formato.parse(stringData));
 		} catch (ParseException e) {
-			throw new IllegalArgumentException("Data invï¿½lida");
+			throw new IllegalArgumentException("Data inválida");
 		}
 
 		Calendar dataAtual = Calendar.getInstance();
@@ -149,23 +154,23 @@ public class Carona {
 																	// valida, 1
 																	// data
 																	// invalida
-			throw new IllegalArgumentException("Data invï¿½lida");
+			throw new IllegalArgumentException("Data inválida");
 		}
 	}
 
 	private void checaHoraInvalida(String hora) {
 		if (hora == null || hora.isEmpty() || hora.matches("[a-zA-Z]*")) {
-			throw new IllegalArgumentException("Hora invï¿½lida");
+			throw new IllegalArgumentException("Hora inválida");
 		}
 		String[] listaHoraMinuto = hora.split(":");
 		try {
 			int horas = Integer.parseInt(listaHoraMinuto[0]);
 			int minutos = Integer.parseInt(listaHoraMinuto[1]);
 			if ((horas >= 24) || (minutos >= 60)) {
-				throw new IllegalArgumentException("Hora invï¿½lida");
+				throw new IllegalArgumentException("Hora inválida");
 			}
 		} catch (Exception e) {
-			throw new IllegalArgumentException("Hora invï¿½lida");
+			throw new IllegalArgumentException("Hora inválida");
 		}
 	}
 
@@ -191,6 +196,12 @@ public class Carona {
 
 	public void setCaroneiros(HashSet<Usuario> caroneiros) {
 		this.caroneiros = caroneiros;
+	}
+
+	@Override
+	public String toString() {
+		return this.getOrigem() + " para " + this.getDestino() + ", no dia "
+				+ this.getData() + ", as " + this.getHora();
 	}
 
 }
